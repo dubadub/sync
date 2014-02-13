@@ -7,8 +7,8 @@ class Sync::RefetchesController < ApplicationController
   before_filter :find_authorized_partial
 
   def show
-    render json: {
-      html: with_format(:html){ @partial.render_to_string }
+    render :json => {
+      :html => with_format(:html){ @partial.render_to_string }
     }
   end
 

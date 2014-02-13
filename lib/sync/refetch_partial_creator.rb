@@ -8,13 +8,13 @@ module Sync
 
     def message
       Sync.client.build_message(channel,
-        refetch: true,
-        resourceId: resource.id,
-        authToken: partial.auth_token,
-        channelUpdate: partial.channel_for_action(:update),
-        channelDestroy: partial.channel_for_action(:destroy),
-        selectorStart: partial.selector_start,
-        selectorEnd: partial.selector_end
+        :refetch => true,
+        :resourceId => resource.id,
+        :authToken => partial.auth_token,
+        :channelUpdate => partial.channel_for_action(:update),
+        :channelDestroy => partial.channel_for_action(:destroy),
+        :selectorStart => partial.selector_start,
+        :selectorEnd => partial.selector_end
       )
     end
   end

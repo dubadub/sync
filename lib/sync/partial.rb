@@ -18,11 +18,12 @@ module Sync
     end
 
     def render_to_string
-      context.render_to_string(partial: path, locals: locals, formats: [:html])
+      context.render_to_string(:partial => path, :locals => locals, :formats => [:html])
     end
 
     def render
-      context.render(partial: path, locals: locals, formats: [:html])
+      p path
+      context.render(:partial => path, :locals => locals, :formats => [:html])
     end
 
     def sync(action)
@@ -31,7 +32,7 @@ module Sync
 
     def message(action)
       Sync.client.build_message channel_for_action(action),
-        html: (render_to_string unless action.to_s == "destroy")
+        :html => (render_to_string unless action.to_s == "destroy")
     end
 
     def authorized?(auth_token)

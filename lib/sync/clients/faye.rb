@@ -40,23 +40,23 @@ module Sync
         def self.batch_publish_synchronous(messages)
           Net::HTTP.post_form(
             URI.parse(Sync.server), 
-            message: batch_messages_query_hash(messages).to_json
+            :message => batch_messages_query_hash(messages).to_json
           )
         end
 
         def self.batch_publish_asynchronous(messages)
           Sync.reactor.perform do
-            EM::HttpRequest.new(Sync.server).post(query: {
-              message: batch_messages_query_hash(messages).to_json
+            EM::HttpRequest.new(Sync.server).post(:query => {
+              :message => batch_messages_query_hash(messages).to_json
             })
           end
         end
 
         def self.batch_messages_query_hash(messages)
           {
-            channel: "/batch_publish",
-            data: messages.collect(&:to_hash),
-            ext: { auth_token: Sync.auth_token }
+            :channel => "/batch_publish",
+            :data => messages.collect(&:to_hash),
+            :ext => { :auth_token => Sync.auth_token }
           }
         end
 
@@ -67,10 +67,10 @@ module Sync
 
         def to_hash
           {
-            channel: channel,
-            data: data,
-            ext: {
-              auth_token: Sync.auth_token
+            :channel => channel,
+            :data => data,
+            :ext => {
+              :auth_token => Sync.auth_token
             }
           }
         end
@@ -88,13 +88,13 @@ module Sync
         end
 
         def publish_synchronous
-          Net::HTTP.post_form URI.parse(Sync.server), message: to_json
+          Net::HTTP.post_form URI.parse(Sync.server), :message => to_json
         end
 
         def publish_asynchronous
           Sync.reactor.perform do
-            EM::HttpRequest.new(Sync.server).post(query: {
-              message: self.to_json
+            EM::HttpRequest.new(Sync.server).post(:query => {
+              :message => self.to_json
             })
           end
         end

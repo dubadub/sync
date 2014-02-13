@@ -26,7 +26,7 @@ module Sync
     end
 
     def message(action)
-      Sync.client.build_message channel_for_action(action), refetch: true
+      Sync.client.build_message channel_for_action(action), :refetch => true
     end
 
     def creator_for_scope(scope)

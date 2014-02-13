@@ -22,7 +22,6 @@ require 'sync/clients/pusher'
 require 'sync/reactor'
 if defined? Rails
   require 'sync/erb_tracker'
-  require 'sync/engine'
 end
 
 module Sync
@@ -89,11 +88,22 @@ module Sync
     # Any options given are passed to the Faye::RackAdapter.
     def pubsub_app(options = {})
       Faye::RackAdapter.new({
-        mount: config[:mount] || "/faye",
-        timeout: config[:timeout] || 45,
-        extensions: [FayeExtension.new]
+        :mount => config[:mount] || "/faye",
+        :timeout => config[:timeout] || 45,
+        :extensions => [FayeExtension.new]
       }.merge(options))
     end
   end
 end
 
+
+if defined? Rails
+  path = Rails.root.join("config/sync.yml")
+  Sync.load_config(path, Rails.env) if path.exist?
+
+  ActiveRecord::Base.send :extend, Sync::Model::ClassMethods
+
+  ActionView::Base.send  :include, Sync::ViewHelpers
+
+  ActionController::Base.send :include, Sync::ControllerHelpers
+end

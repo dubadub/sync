@@ -102,5 +102,22 @@ module Sync
         </script>
       ".html_safe
     end
+
+    # This method returns a html safe string similar to what <tt>Array#join</tt>
+    # would return. All items in the array, including the supplied separator, are
+    # html escaped unless they are html safe, and the returned string is marked
+    # as html safe.
+    #
+    #   safe_join(["<p>foo</p>".html_safe, "<p>bar</p>"], "<br />")
+    #   # => "<p>foo</p>&lt;br /&gt;&lt;p&gt;bar&lt;/p&gt;"
+    #
+    #   safe_join(["<p>foo</p>".html_safe, "<p>bar</p>".html_safe], "<br />".html_safe)
+    #   # => "<p>foo</p><br /><p>bar</p>"
+    #
+    def safe_join(array, sep=$,)
+      sep = ERB::Util.html_escape(sep)
+
+      array.map { |i| ERB::Util.html_escape(i) }.join(sep).html_safe
+    end
   end
 end

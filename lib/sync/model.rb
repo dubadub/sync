@@ -39,13 +39,13 @@ module Sync
         actions.flatten!
 
         if actions.include? :create
-          after_commit :publish_sync_create, on: :create, if: -> { Sync::Model.enabled? }
+          after_commit :publish_sync_create, :on => :create, :if => lamda { Sync::Model.enabled? }
         end
         if actions.include? :update
-          after_commit :publish_sync_update, on: :update, if: -> { Sync::Model.enabled? }
+          after_commit :publish_sync_update, :on => :update, :if => lamda { Sync::Model.enabled? }
         end
         if actions.include? :destroy
-          after_commit :publish_sync_destroy, on: :destroy, if: -> { Sync::Model.enabled? }
+          after_commit :publish_sync_destroy, :on => :destroy, :if => lamda { Sync::Model.enabled? }
         end
       end
     end
@@ -61,7 +61,7 @@ module Sync
       end
 
       def publish_sync_create        
-        sync_new self, scope: sync_scope
+        sync_new self, :scope => sync_scope
         sync_update sync_scope.reload if sync_scope
       end
 
